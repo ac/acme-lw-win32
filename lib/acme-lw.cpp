@@ -5,6 +5,16 @@
 // This should probably be a git submodule, but the repo is huge.
 #include "json.hpp"
 
+#ifdef WIN32
+#include <windows.h>
+#undef X509_NAME
+#undef X509_EXTENSIONS
+extern "C" {
+	FILE _Aiob[] = { *stdin, *stdout, *stderr }; // для статического openssl
+	FILE * __cdecl __iob_func(void) { return _Aiob; }
+}
+#endif
+
 #include <stdio.h>
 #include <iostream>
 
@@ -473,7 +483,11 @@ struct AcmeClientImpl
         constexpr int count = 10;
         do
         {
-            ::usleep(1'000'000);    // sleep for a second
+#ifndef WIN32
+			::usleep(1'000'000);    // sleep for a second
+#else
+			Sleep(1000);
+#endif
             string response = toT<string>(doGet(verificationUri));
             auto json = nlohmann::json::parse(response);
             if (json["status"] == "valid")
