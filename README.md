@@ -6,7 +6,13 @@ This project is yet another [_Let's Encrypt_](https://letsencrypt.org) client. I
 * Functionality only supports creating and updating certificates using http challenges.
 * All code runs 'in process', i.e., no processes are spawned.
 
-#### Building and Installing
+#### Building and Installing (Windows)
+
+```
+vs_build_static.bat 
+```
+
+#### Building and Installing (Unix)
 
 Building requires cmake, openssl and curl. On debian based systems this will install them.
 
